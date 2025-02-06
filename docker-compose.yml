@@ -5,8 +5,9 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     environment:
-      - PORT=${PORT:-7001}  # Railways will provide this
+      - PORT=${PORT:-7001}  # Use Railway's PORT variable
       - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - REPLICATE_API_KEY=${REPLICATE_API_KEY}  # Added as it's required by the app
     ports:
       - "${PORT:-7001}:${PORT:-7001}"
     command: poetry run uvicorn main:app --host 0.0.0.0 --port ${PORT:-7001}
@@ -16,9 +17,9 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     environment:
-      - PORT=5173
-      - VITE_WS_BACKEND_URL=${RAILWAY_STATIC_URL:-http://backend:7001}
+      - PORT=${PORT:-3000}  # Using standard Next.js port
+      - NEXT_PUBLIC_BACKEND_URL=${RAILWAY_PUBLIC_DOMAIN:-http://backend:7001}
     ports:
-      - "5173:5173"
+      - "${PORT:-3000}:${PORT:-3000}"
     depends_on:
       - backend
