@@ -1,0 +1,11 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "docker-compose.yml"
+
+[deploy]
+startCommand = "docker compose up"
+healthcheckPath = "/"
+restartPolicyType = "on-failure"
+
+[env]
+PORT = "7001"
